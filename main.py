@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from database import Base, engine, get_db
-from models import ProdutoDB
-from schemas import ProdutoCreate, ProdutoResponse
+from models import ProdutoDB, Aluno
+from schemas import ProdutoCreate, ProdutoResponse, AlunoResponse, AlunoCreate
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -66,3 +66,20 @@ def atualizar_produto(produto_id: int, dados: ProdutoCreate, db:
     db.commit()
     db.refresh(produto)
     return produto
+
+
+##aluno
+@app.get('/Aluno', response_model=list[AlunoResponse])
+def listar_aluno(db: Session = Depends(get_db)):
+    return db.query(Aluno).all()
+
+
+@app.post('/Aluno', response_model=AlunoResponse, status_code=201)
+def criar_aluno(aluno: AlunoCreate, db: Session = Depends(get_db)):
+    novo_aluno = Aluno(**aluno.dict())
+
+    db.add(novo_aluno)
+    db.commit()
+    db.refresh(novo_aluno)
+
+    return novo_aluno

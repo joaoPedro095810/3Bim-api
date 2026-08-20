@@ -14,3 +14,18 @@ class ProdutoResponse(ProdutoBase):
      
 class Config:
      from_attributes = True
+
+class AlunoBase(BaseModel):
+    nome: str
+    matricula: str
+    curso: str
+    email: str
+
+class AlunoCreate(AlunoBase):
+    pass
+
+class AlunoResponse(AlunoBase):
+     id: int
+     
+class Config:
+     from_attributes = True
